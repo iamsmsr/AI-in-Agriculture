@@ -2,6 +2,10 @@
 
 A modern, user-friendly application that provides AI-powered agricultural recommendations using machine learning models.
 
+## Live Demo
+
+**Try it out:** [https://agri-ai-325y.onrender.com/](https://agri-ai-325y.onrender.com/)
+
 ## Features
 
 - **Crop Recommendation**: Suggests the best crops to plant based on soil composition and environmental factors
@@ -80,6 +84,15 @@ A modern, user-friendly application that provides AI-powered agricultural recomm
   - `*_model.pkl`: Machine learning models
   - `*_scaler.pkl`: Feature scalers
   - `*_label_encoder.pkl`: Label encoders
+
+## Deployment
+
+The application is deployed on Render:
+
+- **URL**: [https://agri-ai-325y.onrender.com/](https://agri-ai-325y.onrender.com/)
+- **Platform**: Render (Free tier)
+- **Build Command**: `npm install && pip install -r requirements.txt`
+- **Start Command**: `node server.js`
 
 ## Troubleshooting
 
