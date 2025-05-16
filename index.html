@@ -387,6 +387,7 @@
     </div>
     <script>
       const API_URL = "https://agri-ai-325y.onrender.com";
+      console.log("API URL being used:", API_URL);
 
       function toggleForms() {
         const mode = document.getElementById("mode").value;
@@ -425,18 +426,32 @@
             parseFloat(form.ph.value),
             parseFloat(form.rainfall.value),
           ];
+
+          console.log("Sending request to:", `${API_URL}/predict_crop`);
+          console.log("Request payload:", JSON.stringify({ features }));
+
           const response = await fetch(`${API_URL}/predict_crop`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ features }),
           });
+
+          console.log("Response status:", response.status);
+
+          if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
+          }
+
           const data = await response.json();
+          console.log("Response data:", data);
+
           showResult(
             data.prediction !== undefined
               ? "🌱 Recommended Crop: " + data.prediction
               : "❌ Prediction failed: " + (data.error || "Unknown error")
           );
         } catch (error) {
+          console.error("Error details:", error);
           showResult("❌ Error: " + error.message);
         } finally {
           showLoading(false);
@@ -467,18 +482,32 @@
             ...soil,
             parseInt(form.Crops.value),
           ];
+
+          console.log("Sending request to:", `${API_URL}/predict_fertilizer`);
+          console.log("Request payload:", JSON.stringify({ features }));
+
           const response = await fetch(`${API_URL}/predict_fertilizer`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ features }),
           });
+
+          console.log("Response status:", response.status);
+
+          if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
+          }
+
           const data = await response.json();
+          console.log("Response data:", data);
+
           showResult(
             data.prediction !== undefined
               ? "💧 Recommended Fertilizer: " + data.prediction
               : "❌ Prediction failed: " + (data.error || "Unknown error")
           );
         } catch (error) {
+          console.error("Error details:", error);
           showResult("❌ Error: " + error.message);
         } finally {
           showLoading(false);
@@ -490,17 +519,31 @@
         showLoading(true);
         try {
           const formData = new FormData(e.target);
+
+          console.log("Sending request to:", `${API_URL}/predict_disease`);
+          console.log("Request type: FormData with image");
+
           const response = await fetch(`${API_URL}/predict_disease`, {
             method: "POST",
             body: formData,
           });
+
+          console.log("Response status:", response.status);
+
+          if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
+          }
+
           const data = await response.json();
+          console.log("Response data:", data);
+
           showResult(
             data.prediction !== undefined
               ? "🔍 Predicted Disease: " + data.prediction
               : "❌ Prediction failed: " + (data.error || "Unknown error")
           );
         } catch (error) {
+          console.error("Error details:", error);
           showResult("❌ Error: " + error.message);
         } finally {
           showLoading(false);
