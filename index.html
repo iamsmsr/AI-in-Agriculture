@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Agri AI - Smart Agriculture Solutions</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #1a5f38 0%, #2d8a4a 100%);
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        max-width: 480px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 32px;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      h2 {
+        text-align: center;
+        color: #1a5f38;
+        font-size: 28px;
+        margin-bottom: 24px;
+        font-weight: 600;
+      }
+
+      select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        color: #333;
+        background-color: white;
+        margin-bottom: 24px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      select:hover {
+        border-color: #2d8a4a;
+      }
+
+      select:focus {
+        outline: none;
+        border-color: #2d8a4a;
+        box-shadow: 0 0 0 3px rgba(45, 138, 74, 0.1);
+      }
+
+      label {
+        display: block;
+        margin-top: 16px;
+        color: #333;
+        font-weight: 500;
+        font-size: 14px;
+      }
+
+      input[type="number"],
+      input[type="file"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        margin: 8px 0;
+        transition: all 0.3s ease;
+      }
+
+      input[type="number"]:focus,
+      input[type="file"]:focus {
+        outline: none;
+        border-color: #2d8a4a;
+        box-shadow: 0 0 0 3px rgba(45, 138, 74, 0.1);
+      }
+
+      .soil-group {
+        margin: 16px 0;
+        padding: 16px;
+        background: #f8f9fa;
+        border-radius: 10px;
+      }
+
+      .soil-group span {
+        display: block;
+        margin-bottom: 12px;
+        color: #333;
+        font-weight: 500;
+      }
+
+      .soil-group label {
+        display: inline-flex;
+        align-items: center;
+        margin: 8px 16px 8px 0;
+        cursor: pointer;
+      }
+
+      .soil-group input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        cursor: pointer;
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        background: #2d8a4a;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 24px;
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        background: #1a5f38;
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .result {
+        margin-top: 24px;
+        padding: 16px;
+        border-radius: 10px;
+        background: #e8f5e9;
+        color: #1a5f38;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        display: none;
+      }
+
+      .result.show {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .loading {
+        display: none;
+        text-align: center;
+        margin-top: 16px;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .loading.show {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Custom file input styling */
+      input[type="file"] {
+        padding: 10px;
+        background: #f8f9fa;
+        cursor: pointer;
+      }
+
+      input[type="file"]::-webkit-file-upload-button {
+        background: #2d8a4a;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-right: 12px;
+        transition: all 0.3s ease;
+      }
+
+      input[type="file"]::-webkit-file-upload-button:hover {
+        background: #1a5f38;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Agri AI</h2>
+      <select id="mode" onchange="toggleForms()">
+        <option value="crop">Crop Recommendation</option>
+        <option value="fertilizer">Fertilizer Recommendation</option>
+        <option value="disease">Crop Disease Prediction</option>
+      </select>
+
+      <!-- Crop Form -->
+      <form id="cropForm">
+        <label for="N">Nitrogen (N):</label>
+        <input type="number" name="N" id="N" step="any" required />
+        <label for="P">Phosphorous (P):</label>
+        <input type="number" name="P" id="P" step="any" required />
+        <label for="K">Potassium (K):</label>
+        <input type="number" name="K" id="K" step="any" required />
+        <label for="temperature">Temperature (°C):</label>
+        <input
+          type="number"
+          name="temperature"
+          id="temperature"
+          step="any"
+          required
+        />
+        <label for="humidity">Humidity (%):</label>
+        <input
+          type="number"
+          name="humidity"
+          id="humidity"
+          step="any"
+          required
+        />
+        <label for="ph">pH:</label>
+        <input type="number" name="ph" id="ph" step="any" required />
+        <label for="rainfall">Rainfall (mm):</label>
+        <input
+          type="number"
+          name="rainfall"
+          id="rainfall"
+          step="any"
+          required
+        />
+        <button type="submit">Predict Crop</button>
+      </form>
+
+      <!-- Fertilizer Form -->
+      <form id="fertilizerForm" style="display: none">
+        <label for="Temperature">Temperature (°C):</label>
+        <input
+          type="number"
+          name="Temperature"
+          id="Temperature"
+          step="any"
+          required
+        />
+        <label for="Moisture">Moisture (%):</label>
+        <input
+          type="number"
+          name="Moisture"
+          id="Moisture"
+          step="any"
+          required
+        />
+        <label for="Rainfall">Rainfall (mm):</label>
+        <input
+          type="number"
+          name="Rainfall"
+          id="Rainfall"
+          step="any"
+          required
+        />
+        <label for="PH">pH:</label>
+        <input type="number" name="PH" id="PH" step="any" required />
+        <label for="Nitrogen">Nitrogen (N):</label>
+        <input
+          type="number"
+          name="Nitrogen"
+          id="Nitrogen"
+          step="any"
+          required
+        />
+        <label for="Phosphorous">Phosphorous (P):</label>
+        <input
+          type="number"
+          name="Phosphorous"
+          id="Phosphorous"
+          step="any"
+          required
+        />
+        <label for="Potassium">Potassium (K):</label>
+        <input
+          type="number"
+          name="Potassium"
+          id="Potassium"
+          step="any"
+          required
+        />
+        <label for="Carbon">Carbon:</label>
+        <input type="number" name="Carbon" id="Carbon" step="any" required />
+        <div class="soil-group">
+          <span>Soil Type:</span><br />
+          <label
+            ><input type="checkbox" name="Soil_Acidic" id="Soil_Acidic" />
+            Acidic</label
+          >
+          <label
+            ><input type="checkbox" name="Soil_Alkaline" id="Soil_Alkaline" />
+            Alkaline</label
+          >
+          <label
+            ><input type="checkbox" name="Soil_Loamy" id="Soil_Loamy" />
+            Loamy</label
+          >
+          <label
+            ><input type="checkbox" name="Soil_Neutral" id="Soil_Neutral" />
+            Neutral</label
+          >
+          <label
+            ><input type="checkbox" name="Soil_Peaty" id="Soil_Peaty" />
+            Peaty</label
+          >
+        </div>
+        <label for="Crops">Crop:</label>
+        <select name="Crops" id="Crops" required>
+          <option value="0">Adzuki Beans</option>
+          <option value="1">Black gram</option>
+          <option value="2">Chickpea</option>
+          <option value="3">Coconut</option>
+          <option value="4">Coffee</option>
+          <option value="5">Cotton</option>
+          <option value="6">Ground Nut</option>
+          <option value="7">Jute</option>
+          <option value="8">Kidney Beans</option>
+          <option value="9">Lentil</option>
+          <option value="10">Moth Beans</option>
+          <option value="11">Mung Bean</option>
+          <option value="12">Peas</option>
+          <option value="13">Pigeon Peas</option>
+          <option value="14">Rubber</option>
+          <option value="15">Sugarcane</option>
+          <option value="16">Tea</option>
+          <option value="17">Tobacco</option>
+          <option value="18">apple</option>
+          <option value="19">banana</option>
+          <option value="20">grapes</option>
+          <option value="21">maize</option>
+          <option value="22">mango</option>
+          <option value="23">millet</option>
+          <option value="24">muskmelon</option>
+          <option value="25">orange</option>
+          <option value="26">papaya</option>
+          <option value="27">pomegranate</option>
+          <option value="28">rice</option>
+          <option value="29">watermelon</option>
+          <option value="30">wheat</option>
+        </select>
+        <button type="submit">Predict Fertilizer</button>
+      </form>
+
+      <!-- Disease Form -->
+      <form
+        id="diseaseForm"
+        style="display: none"
+        enctype="multipart/form-data"
+      >
+        <label for="diseaseImage">Upload Crop Leaf Image:</label>
+        <input
+          type="file"
+          id="diseaseImage"
+          name="image"
+          accept="image/*"
+          required
+        />
+        <button type="submit">Predict Disease</button>
+      </form>
+
+      <div class="loading" id="loading">Processing... Please wait.</div>
+      <div class="result" id="result"></div>
+    </div>
+    <script>
+      const API_URL = "http://localhost:5000";
+
+      function toggleForms() {
+        const mode = document.getElementById("mode").value;
+        document.getElementById("cropForm").style.display =
+          mode === "crop" ? "" : "none";
+        document.getElementById("fertilizerForm").style.display =
+          mode === "fertilizer" ? "" : "none";
+        document.getElementById("diseaseForm").style.display =
+          mode === "disease" ? "" : "none";
+        document.getElementById("result").textContent = "";
+      }
+
+      function showResult(text) {
+        const resultDiv = document.getElementById("result");
+        resultDiv.textContent = text;
+        resultDiv.classList.add("show");
+      }
+
+      function showLoading(show) {
+        const loadingDiv = document.getElementById("loading");
+        loadingDiv.style.display = show ? "block" : "none";
+        loadingDiv.classList.toggle("show", show);
+      }
+
+      document.getElementById("cropForm").onsubmit = async function (e) {
+        e.preventDefault();
+        showLoading(true);
+        try {
+          const form = e.target;
+          const features = [
+            parseFloat(form.N.value),
+            parseFloat(form.P.value),
+            parseFloat(form.K.value),
+            parseFloat(form.temperature.value),
+            parseFloat(form.humidity.value),
+            parseFloat(form.ph.value),
+            parseFloat(form.rainfall.value),
+          ];
+          const response = await fetch(`${API_URL}/predict_crop`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ features }),
+          });
+          const data = await response.json();
+          showResult(
+            data.prediction !== undefined
+              ? "🌱 Recommended Crop: " + data.prediction
+              : "❌ Prediction failed: " + (data.error || "Unknown error")
+          );
+        } catch (error) {
+          showResult("❌ Error: " + error.message);
+        } finally {
+          showLoading(false);
+        }
+      };
+
+      document.getElementById("fertilizerForm").onsubmit = async function (e) {
+        e.preventDefault();
+        showLoading(true);
+        try {
+          const form = e.target;
+          const soil = [
+            form.Soil_Acidic.checked ? 1 : 0,
+            form.Soil_Alkaline.checked ? 1 : 0,
+            form.Soil_Loamy.checked ? 1 : 0,
+            form.Soil_Neutral.checked ? 1 : 0,
+            form.Soil_Peaty.checked ? 1 : 0,
+          ];
+          const features = [
+            parseFloat(form.Temperature.value),
+            parseFloat(form.Moisture.value),
+            parseFloat(form.Rainfall.value),
+            parseFloat(form.PH.value),
+            parseFloat(form.Nitrogen.value),
+            parseFloat(form.Phosphorous.value),
+            parseFloat(form.Potassium.value),
+            parseFloat(form.Carbon.value),
+            ...soil,
+            parseInt(form.Crops.value),
+          ];
+          const response = await fetch(`${API_URL}/predict_fertilizer`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ features }),
+          });
+          const data = await response.json();
+          showResult(
+            data.prediction !== undefined
+              ? "💧 Recommended Fertilizer: " + data.prediction
+              : "❌ Prediction failed: " + (data.error || "Unknown error")
+          );
+        } catch (error) {
+          showResult("❌ Error: " + error.message);
+        } finally {
+          showLoading(false);
+        }
+      };
+
+      document.getElementById("diseaseForm").onsubmit = async function (e) {
+        e.preventDefault();
+        showLoading(true);
+        try {
+          const formData = new FormData(e.target);
+          const response = await fetch(`${API_URL}/predict_disease`, {
+            method: "POST",
+            body: formData,
+          });
+          const data = await response.json();
+          showResult(
+            data.prediction !== undefined
+              ? "🔍 Predicted Disease: " + data.prediction
+              : "❌ Prediction failed: " + (data.error || "Unknown error")
+          );
+        } catch (error) {
+          showResult("❌ Error: " + error.message);
+        } finally {
+          showLoading(false);
+        }
+      };
+    </script>
+  </body>
+</html>
