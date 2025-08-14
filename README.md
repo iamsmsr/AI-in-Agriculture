@@ -7,6 +7,8 @@ A modern, user-friendly application that provides AI-powered agricultural recomm
 
 **Try it out:** [https://agri-ai-325y.onrender.com/](https://agri-ai-325y.onrender.com/)
 
+**Project Report (IEEE format) and Project Demo Video is included in this repo!!**
+
 ## Features
 
 - **Crop Recommendation**: Suggests the best crops to plant based on soil composition and environmental factors
