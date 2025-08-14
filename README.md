@@ -1,7 +1,8 @@
 # Agri AI - Smart Agriculture Application
 
-**An Ensemble Stacking Approach with Web Application for Crop, Fertilizer, and Disease Recommendation
-A modern, user-friendly application that provides AI-powered agricultural recommendations using machine learning models.**
+**An Ensemble Stacking Approach with Web Application for Crop, Fertilizer, and Disease Recommendation**
+
+**A modern, user-friendly application that provides AI-powered agricultural recommendations using machine learning models.**
 
 ## Live Demo
 
